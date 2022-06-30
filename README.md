@@ -3,19 +3,21 @@
 ## Introduction
 Working from home, I  spend a lot of time in virtual meetings.  For one-on-one meetings an open mic is fine but during group meetings I keep my mic muted unless I’m talking. This keeps my background noise from interrupting the speaker and is generally good form in group meetings.
 
-Windows and Linux don't have a built in push-to-talk system, so third-party software needs to be installed.  When I'm on a Windows system, I use an app called [Talk Toggle](https://www.microsoft.com/en-us/p/talk-toggle/9nrjcs6g10kt#activetab=pivot:overviewtab) which provides system wide Push-To-Talk functionality.   On the Mac the app [MuteKey](https://apps.apple.com/us/app/mutekey/id1509590766?mt=12) has similar functionality.  Microsoft Teams has a limited push-to-talk option, but I found the third-part app better because the hotkey is system-wide.
+Windows and Linux don't have a built in push-to-talk system, so third-party software needs to be installed.  When I'm on a Windows system, I use an app called [Talk Toggle](https://apps.microsoft.com/store/detail/talk-toggle/9NRJCS6G10KT) which provides system wide Push-To-Talk functionality.   On the Mac the app [MuteKey](https://apps.apple.com/us/app/mutekey/id1509590766?mt=12) has similar functionality.  
 
-While the software works, I have a tendency to forget to press the PTT hotkey when I started talking.  I need something I can hold in my hands as a reminder.  A quick google and I saw that there were options but they all cost more then I wanted to pay or didn't work like I wanted.  I decided to build my own PTT solution.
+_Yes, both Microsoft Teams and Zoom have push-to-talk functionality, but I found the third-party apps are a better choice because the hotkey can be set to system-wide instead of only in the app.  Also Microsoft Teams doesn't let you remap the keyboard key._
+
+While the software works, I have a tendency to forget to press the PTT hotkey when I started talking.  I need something I can hold in my hands as a reminder.  Commercal version were expensive A quick google and I saw that there were options but they expensive or didn't work the way I wanted.  So I decided to build my own push-to-talk button.
 
 ## Shopping List
-1. [Handheld push button](https://www.ebay.com/itm/122657808383) - I use the Philmore 30-825, but any momentary switch will work.
+1. Handheld push button - I use the [Philmore 30-825](https://www.ebay.com/sch/i.html?_nkw=Philmore+30-825%2C&_sacat=0), but any momentary switch will work.
    1. You can also use a foot pedal version like the  [Linemaster T-91-S](https://linemaster.com/product/378/Treadlite-Ii/T-91-S/) if you want to keep your hands free (also works good for activating stealth mode in games).
-1. Any micro-controller that can emulate an HID will work.  Two options are:
+2. Any micro-controller that can emulate an HID will work.  Two options are:
    1. [Teensy USB Development Board (with pins)](https://www.pjrc.com/store/teensy_pins.html)
    2. [Raspberry Pi Pico](https://www.raspberrypi.org/products/raspberry-pi-pico/)
-1. [USB Cable - A-Male to Mini-B Cord](https://www.pjrc.com/store/cable_usb_micro_b.html)
-1. [Heat shrink tube](https://www.amazon.com/560PCS-Heat-Shrink-Tubing-Eventronic/dp/B072PCQ2LW)
-1. Miscellaneous wires.  I used an broken USB-C cable and some wires I had laying around.
+3. [USB Cable - A-Male to Mini-B Cord](https://www.pjrc.com/store/cable_usb_micro_b.html)
+4. [Heat shrink tube](https://www.amazon.com/560PCS-Heat-Shrink-Tubing-Eventronic/dp/B072PCQ2LW)
+5. Miscellaneous wires.  I used an broken USB-C cable and some wires I had laying around.
 
 ## Building with the Teensy
 
