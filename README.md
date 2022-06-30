@@ -1,20 +1,18 @@
 ![PTT](./PTT1.png)
 
 ## Introduction
-I'm spending a lot of time in virtual meetings due to COVID.  Apps like Teams and Zoom offer a way to connect with my co-workers.
+Working from home, I  spend a lot of time in virtual meetings.  For one-on-one meetings an open mic is fine but during group meetings I keep my mic muted unless I’m talking. This keeps my background noise from interrupting the speaker and is generally good form in group meetings.
 
-For one-on-one meetings an open mic is fine but during group meetings I keep my mic muted unless I’m talking. This keeps my background noise from interrupting the speaker and is generally good form in group meetings.
+Windows and Linux don't have a built in push-to-talk system, so third-party software needs to be installed.  When I'm on a Windows system, I use an app called [Talk Toggle](https://www.microsoft.com/en-us/p/talk-toggle/9nrjcs6g10kt#activetab=pivot:overviewtab) which provides system wide Push-To-Talk functionality.   On the Mac the app [MuteKey](https://apps.apple.com/us/app/mutekey/id1509590766?mt=12) has similar functionality.  Microsoft Teams has a limited push-to-talk option, but I found the third-part app better because the hotkey is system-wide.
 
-I picked up an app called [Talk Toggle](https://www.microsoft.com/en-us/p/talk-toggle/9nrjcs6g10kt#activetab=pivot:overviewtab) which provides system wide Push-To-Talk functionality> I then configured it to recognize F13 as its hotkey and remapped the menu key to send F13 with [AutoHotKey](https://www.autohotkey.com/).  On the Mac the app [MuteKey](https://apps.apple.com/us/app/mutekey/id1509590766?mt=12) has similar functionality.
-
-While I had a passing "push-to-talk" setup I kept forgetting to press the PTT hotkey when I started talking.  I needed something I could hold in my hands as a reminder.  A quick google and I saw that there were options but they all cost more then I wanted to pay or didn't work like I wanted.  I decided to build my own PTT solution.
+While the software works, I have a tendency to forget to press the PTT hotkey when I started talking.  I need something I can hold in my hands as a reminder.  A quick google and I saw that there were options but they all cost more then I wanted to pay or didn't work like I wanted.  I decided to build my own PTT solution.
 
 ## Shopping List
 1. [Handheld push button](https://www.ebay.com/itm/122657808383) - I use the Philmore 30-825, but any momentary switch will work.
-   1. I recently added a [Linemaster T-91-S](https://linemaster.com/product/378/Treadlite-Ii/T-91-S/) foot pedel that works well.
+   1. You can also use a foot pedal version like the  [Linemaster T-91-S](https://linemaster.com/product/378/Treadlite-Ii/T-91-S/) if you want to keep your hands free (also works good for activating stealth mode in games).
 1. Any micro-controller that can emulate an HID will work.  Two options are:
    1. [Teensy USB Development Board (with pins)](https://www.pjrc.com/store/teensy_pins.html)
-   1. [Raspberry Pi Pico](https://www.raspberrypi.org/products/raspberry-pi-pico/)
+   2. [Raspberry Pi Pico](https://www.raspberrypi.org/products/raspberry-pi-pico/)
 1. [USB Cable - A-Male to Mini-B Cord](https://www.pjrc.com/store/cable_usb_micro_b.html)
 1. [Heat shrink tube](https://www.amazon.com/560PCS-Heat-Shrink-Tubing-Eventronic/dp/B072PCQ2LW)
 1. Miscellaneous wires.  I used an broken USB-C cable and some wires I had laying around.
@@ -25,7 +23,7 @@ While I had a passing "push-to-talk" setup I kept forgetting to press the PTT ho
 Connect wires between the handheld push button poles and  pins `B1` and `GND`.  This is a simple switch so it doesn't matter which wire is connected to which pin.  I used a breadboard and some jumper wires to avoid soldering to the teensy board.  Heat shrink up any soldered wires too keep things safe and looking clean.
 
 ### Code
-Start up [Teensy](https://www.pjrc.com/teensy/td_download.html) and load the below code onto the teensy.  It will detect when B1 is closed and will press `ALT+SPACE`.  With the above Talk Toggle or MuteKey, pressing the `ALT+SPACE` will unmute the mics.  Release the PTT button and the teensy will release `ALT+SPACE`, reactivating mic mute.
+Start up [Teensydino](https://www.pjrc.com/teensy/td_download.html) and make sure it detects your teensy.  Set the USB Type (under Tools) to `Keyboard + Mouse + Joystick` so that it emulates a keyboard.  Then load the below code.  It will detect when B1 is closed and will press `F13`.  With the above Talk Toggle or MuteKey, pressing the `F13` will unmute the mics.  Release the PTT button and the teensy will release `F13`, reactivating mic mute.
 
 ````c
 #include <Bounce.h>
@@ -43,22 +41,20 @@ void loop() {
 
   // When the button is pushed, send ALT+SPACE down
   if (buttonPTT.fallingEdge()) {
-    Keyboard.press(MODIFIERKEY_ALT);
-    Keyboard.press(KEY_SPACE);
+    Keyboard.press(KEY_F13);
     digitalWrite(PIN_D6, HIGH); // LED ON
   }
 
   // When the button is release, send ALT+SPACE release
   if(buttonPTT.risingEdge()) {
-    Keyboard.release(MODIFIERKEY_ALT);
-    Keyboard.release(KEY_SPACE);
+    Keyboard.press(KEY_F13);
     digitalWrite(PIN_D6, LOW); // LED OFF
   }
 }
 ````
 
 ## Building with the Raspberry Pi Pico
-At $4 US, these are cheap MPC drive the cost of the project to less then $20 (slightly more than the cost of the Teensy alone).  My main reluctance in using the pico is that HID emulation [is currently not supported](https://github.com/micropython/micropython/issues/6811) in the [MicroPython](https://micropython.org/).  Instead I use [CircuitPython](https://circuitpython.org/) to emulate a keyboard with the [Adafruit HID library](https://github.com/adafruit/Adafruit_CircuitPython_HID).  CircuitPython (as of 2021-03-06) shows up as a USB drive when plugged in which makes for easy code editing but some companies have strict no-USB drive policy on company laptops.  As a result the pico option is not as widely usable as the Teensy which just shows up as a keyboard.
+At $4 US, these inexpensive MPC drives the cost of the project to less then $20 (slightly more than the cost of the Teensy alone).  My main reluctance in using the pico is that HID emulation [is currently not supported](https://github.com/micropython/micropython/issues/6811) in the [MicroPython](https://micropython.org/).  Instead I use [CircuitPython](https://circuitpython.org/) to emulate a keyboard with the [Adafruit HID library](https://github.com/adafruit/Adafruit_CircuitPython_HID).  CircuitPython (as of 2021-03-06) shows up as a USB drive when plugged in which makes for easy code editing but some companies have strict no-USB drive policy on company laptops.  As a result the pico option is not as widely usable as the Teensy which just shows up as a keyboard.
 
 ### Assembly
 Connect wires between the handheld push button poles and pins `GP15` and `3v3`.  This is a simple switch so it doesn't matter which wire is connected to which pin.  I used a breadboard and some jumper wires to avoid soldering to the pico board.  Heat shrink up any soldered wires too keep things safe and looking clean.
