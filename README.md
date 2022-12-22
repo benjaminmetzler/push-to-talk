@@ -13,7 +13,12 @@ While the software works, I have a tendency to forget to press the PTT hotkey wh
 ## Shopping List
 
 1. Handheld push button - I use the [Philmore 30-825](https://www.ebay.com/sch/i.html?_nkw=Philmore+30-825%2C&_sacat=0), but any momentary switch will work.
-   1. You can also use a foot pedal version like the  [Linemaster T-91-S](https://linemaster.com/product/378/Treadlite-Ii/T-91-S/) if you want to keep your hands free (also works good for activating stealth mode in games).
+   1. You can create a wireless version with something [like this](https://smile.amazon.com/gp/product/B08F7CTDWT). There is a slight delay from when the button is released and the receiver disconnects, but overall it works really well. On the Teensy, use the below connections.
+      1. `-` to `GRD`
+      2. `+` to `VCC`
+      3. `ON` to `B13`
+      4. `COM` to `GRD`
+   2. A foot pedal version like the  [Linemaster T-91-S](https://linemaster.com/product/378/Treadlite-Ii/T-91-S/) will also work, if you  hands free (also works good for activating stealth mode in games).
 2. Any micro-controller that can emulate an HID will work.  Two options are:
    1. [Teensy USB Development Board (with pins)](https://www.pjrc.com/store/teensy_pins.html)
    2. [Raspberry Pi Pico](https://www.raspberrypi.org/products/raspberry-pi-pico/)
